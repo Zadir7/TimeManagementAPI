@@ -1,25 +1,21 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Repositories.Abstracts;
 using Repositories.Implementations;
+using Services.Abstracts;
+using Services.Implementations;
 
 namespace TimeManagementAPI
 {
     public class Startup
     {
+        private const string CorsAllowAllPolicy = "AllowAllPolicy";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -36,8 +32,18 @@ namespace TimeManagementAPI
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IActivityRepository, ActivityRepository>();
-            
-            
+
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IActivityService, ActivityService>();
+
+            services.AddCors(options => 
+                options.AddPolicy(CorsAllowAllPolicy, builder => 
+                    builder
+                        .AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                    )
+                );
             
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -59,6 +65,8 @@ namespace TimeManagementAPI
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(CorsAllowAllPolicy);
 
             app.UseAuthorization();
 

@@ -7,17 +7,21 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.1" NoWarn="NU1605" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.1" NoWarn="NU1605" />
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Controllers" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Data\Data.csproj" />
       <ProjectReference Include="..\Repositories.Abstracts\Repositories.Abstracts.csproj" />
       <ProjectReference Include="..\Repositories.Implementations\Repositories.Implementations.csproj" />
+      <ProjectReference Include="..\Services.Abstracts\Services.Abstracts.csproj" />
+      <ProjectReference Include="..\Services.Implementations\Services.Implementations.csproj" />
+      <ProjectReference Include="..\SharedData\SharedData.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Controllers" />
     </ItemGroup>
 
 </Project>
