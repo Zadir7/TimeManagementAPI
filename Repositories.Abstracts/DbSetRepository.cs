@@ -41,5 +41,10 @@ namespace Repositories.Abstracts
             DbSet.Remove(entity);
             return entity;
         }
+
+        public void SaveChanges()
+        {
+            _context.SaveChanges();
+        }
     }
 }

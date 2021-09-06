@@ -6,5 +6,6 @@ namespace Repositories.Abstracts
     public interface IUserRepository : ICrudRepository<User>
     {
         public IEnumerable<User> GetUserList();
+        public User GetByEmail(string email);
     }
 }

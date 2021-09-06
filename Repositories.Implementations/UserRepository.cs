@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Abstracts;
@@ -11,9 +12,8 @@ namespace Repositories.Implementations
         {
         }
 
-        public IEnumerable<User> GetUserList()
-        {
-            return DbSet;
-        }
+        public IEnumerable<User> GetUserList() => DbSet;
+
+        public User GetByEmail(string email) => DbSet.FirstOrDefault(u => u.Email == email);
     }
 }

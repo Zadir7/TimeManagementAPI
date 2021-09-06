@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstracts;
@@ -23,6 +24,12 @@ namespace TimeManagementAPI.Controllers
         {
             return await _userService.Get(id);
         }
+        
+        [HttpGet("list")]
+        public async Task<ActionResult<List<UserDto>>> GetUserListAsync()
+        {
+            return await _userService.GetUserList();
+        }
 
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] UserDto request)
@@ -38,7 +45,7 @@ namespace TimeManagementAPI.Controllers
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(Guid id)
-        {
+        { 
             return await _userService.Delete(id);
         }
     }

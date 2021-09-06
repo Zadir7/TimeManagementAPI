@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SharedData.DTO;
@@ -11,5 +12,6 @@ namespace Services.Abstracts
         public Task<ActionResult> Update(Guid id, UserDto userModel);
         public Task<ActionResult<UserDto>> Get(Guid id);
         public Task<ActionResult> Delete(Guid id);
+        public Task<List<UserDto>> GetUserList();
     }
 }
