@@ -13,10 +13,10 @@ namespace Repositories.Implementations
         {
         }
 
-        public IEnumerable<Activity> GetActivitiesOfUserOnChosenMonth(User user, int month)
+        public IEnumerable<Activity> GetActivitiesOfUserOnChosenMonth(Guid userId, int month)
         {
             return DbSet.Where(activity => 
-                activity.User == user && 
+                activity.User.Id == userId && 
                 activity.Date.Year == DateTime.Now.Year &&
                 activity.Date.Month == month);
         }
