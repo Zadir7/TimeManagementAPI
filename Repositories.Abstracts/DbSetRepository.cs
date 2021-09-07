@@ -1,16 +1,22 @@
 using System;
+using Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Repositories.Abstracts
 {
     public abstract class DbSetRepository<TEntity> : ICrudRepository<TEntity> where TEntity : class
     {
-        private readonly DbContext _context;
+        protected readonly ApplicationContext _context;
         protected readonly DbSet<TEntity> DbSet;
         
-        public DbSetRepository(DbSet<TEntity> dbSet, DbContext context)
+        public DbSetRepository(DbSet<TEntity> dbSet, ApplicationContext context)
         {
             DbSet = dbSet;
+            _context = context;
+        }
+
+        public DbSetRepository(ApplicationContext context)
+        {
             _context = context;
         }
         

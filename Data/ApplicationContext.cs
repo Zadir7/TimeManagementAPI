@@ -5,7 +5,11 @@ namespace Data
 {
     public class ApplicationContext : DbContext
     {
-        internal DbSet<User> Users { get; set; }
-        internal DbSet<Activity> Activities { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Activity> Activities { get; set; }
+
+        public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
+        {
+        }
     }
 }

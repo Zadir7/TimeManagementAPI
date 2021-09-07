@@ -19,7 +19,7 @@ namespace TimeManagementAPI.Controllers
             _userService = userService;
         }
         
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<UserDto>> GetAsync(Guid id)
         {
             return await _userService.Get(id);
