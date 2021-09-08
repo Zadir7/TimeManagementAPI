@@ -7,15 +7,9 @@ namespace Repositories.Abstracts
     public abstract class DbSetRepository<TEntity> : ICrudRepository<TEntity> where TEntity : class
     {
         protected readonly ApplicationContext _context;
-        protected readonly DbSet<TEntity> DbSet;
-        
-        public DbSetRepository(DbSet<TEntity> dbSet, ApplicationContext context)
-        {
-            DbSet = dbSet;
-            _context = context;
-        }
+        protected abstract DbSet<TEntity> DbSet { get; init; }
 
-        public DbSetRepository(ApplicationContext context)
+        protected DbSetRepository(ApplicationContext context)
         {
             _context = context;
         }
