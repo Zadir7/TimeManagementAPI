@@ -32,19 +32,19 @@ namespace TimeManagementAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] UserDto request)
+        public async Task<ActionResult> PostAsync([FromBody] UserDto request)
         {
             return await _userService.Add(request);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(Guid id, [FromBody] UserDto request)
+        public async Task<ActionResult> PutAsync(Guid id, [FromBody] UserDto request)
         {
             return await _userService.Update(id, request);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(Guid id)
+        public async Task<ActionResult> DeleteAsync(Guid id)
         { 
             return await _userService.Delete(id);
         }

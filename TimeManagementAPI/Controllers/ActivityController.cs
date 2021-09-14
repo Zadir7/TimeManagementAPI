@@ -27,26 +27,26 @@ namespace TimeManagementAPI.Controllers
         }
         
         [HttpGet]
-        public async Task<ActionResult<List<ActivityDto>>> GetUsersActivityList([FromBody] UserActivityListRequest request)
+        public async Task<ActionResult<List<ActivityDto>>> GetUsersActivityListAsync([FromBody] UserActivityListRequest request)
         {
             var (user, month) = request;
             return await _activityService.GetUserActivitiesOnSelectedMonth(user, month);
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] ActivityDto request)
+        public async Task<ActionResult> PostAsync([FromBody] ActivityDto request)
         {
             return await _activityService.Add(request);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(Guid id, [FromBody] ActivityDto request)
+        public async Task<ActionResult> PutAsync(Guid id, [FromBody] ActivityDto request)
         {
             return await _activityService.Update(id, request);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(Guid id)
+        public async Task<ActionResult> DeleteAsync(Guid id)
         { 
             return await _activityService.Delete(id);
         }
