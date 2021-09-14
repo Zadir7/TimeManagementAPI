@@ -4,7 +4,6 @@ using System.Linq;
 using Data;
 using Data.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using Repositories.Abstracts;
 
 namespace Repositories.Implementations
@@ -14,7 +13,7 @@ namespace Repositories.Implementations
         protected override DbSet<Activity> DbSet { get; init; }
         public ActivityRepository(ApplicationContext context) : base(context)
         {
-            DbSet = new InternalDbSet<Activity>(context, nameof(Activity));
+            DbSet = context.Set<Activity>();
         }
 
         public IEnumerable<Activity> GetActivitiesOfUserOnChosenMonth(Guid userId, int month)

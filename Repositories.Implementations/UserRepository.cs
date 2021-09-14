@@ -3,7 +3,6 @@ using System.Linq;
 using Data;
 using Data.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using Repositories.Abstracts;
 
 namespace Repositories.Implementations
@@ -13,7 +12,7 @@ namespace Repositories.Implementations
         protected override DbSet<User> DbSet { get; init; }
         public UserRepository(ApplicationContext context) : base(context)
         {
-            DbSet = new InternalDbSet<User>(context, nameof(User));
+            DbSet = context.Set<User>();
         }
 
         public IEnumerable<User> GetUserList() => DbSet;

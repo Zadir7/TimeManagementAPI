@@ -25,7 +25,7 @@ namespace TimeManagementAPI.Controllers
             return await _userService.Get(id);
         }
         
-        [HttpGet("list")]
+        [HttpGet]
         public async Task<ActionResult<List<UserDto>>> GetUserListAsync()
         {
             return await _userService.GetUserList();

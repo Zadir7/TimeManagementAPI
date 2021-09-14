@@ -26,7 +26,7 @@ namespace TimeManagementAPI.Controllers
             return await _activityService.Get(id);
         }
         
-        [HttpGet("list")]
+        [HttpGet]
         public async Task<ActionResult<List<ActivityDto>>> GetUsersActivityList([FromBody] UserActivityListRequest request)
         {
             var (user, month) = request;
