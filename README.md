@@ -1,5 +1,5 @@
 #TimeManagementAPI  
-Тестовое задание (TODO - Fix model creating (Cannot create a DbSet for 'User' because this type is not included in the model for the context.))
+Тестовое задание
 
 # Сервис - Учет времени
 
