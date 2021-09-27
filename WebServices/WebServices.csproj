@@ -10,4 +10,9 @@
       </Reference>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Services.Abstracts\Services.Abstracts.csproj" />
+      <ProjectReference Include="..\SharedData\SharedData.csproj" />
+    </ItemGroup>
+
 </Project>

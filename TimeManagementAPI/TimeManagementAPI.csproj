@@ -18,6 +18,7 @@
       <ProjectReference Include="..\Services.Abstracts\Services.Abstracts.csproj" />
       <ProjectReference Include="..\Services.Implementations\Services.Implementations.csproj" />
       <ProjectReference Include="..\SharedData\SharedData.csproj" />
+      <ProjectReference Include="..\WebServices\WebServices.csproj" />
     </ItemGroup>
 
 </Project>

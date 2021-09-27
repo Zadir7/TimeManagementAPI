@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Services.Abstracts;
 using SharedData.DTO;
-using SharedData.Requests;
+using WebServices.Abstracts;
 
 namespace TimeManagementAPI.Controllers
 {
@@ -13,42 +11,41 @@ namespace TimeManagementAPI.Controllers
     [ApiController]
     public class ActivityController : ControllerBase
     {
-        private readonly IActivityService _activityService;
+        private readonly IActivityWebService _activityService;
 
-        public ActivityController(IActivityService activityService)
+        public ActivityController(IActivityWebService activityService)
         {
             _activityService = activityService;
         }
         
         [HttpGet("{id}")]
-        public async Task<ActionResult<ActivityDto>> GetAsync(Guid id)
+        public ActionResult<ActivityDto> Get(Guid id)
         {
-            return await _activityService.Get(id);
+            return _activityService.Get(id);
         }
         
         [HttpGet]
-        public async Task<ActionResult<List<ActivityDto>>> GetUsersActivityListAsync([FromBody] UserActivityListRequest request)
+        public ActionResult<List<ActivityDto>> GetList([FromBody] UserActivityListRequest request)
         {
-            var (user, month) = request;
-            return await _activityService.GetUserActivitiesOnSelectedMonth(user, month);
+            return _activityService.GetList(request);
         }
 
         [HttpPost]
-        public async Task<ActionResult> PostAsync([FromBody] ActivityDto request)
+        public ActionResult<Guid> PostAsync([FromBody] ActivityDto request)
         {
-            return await _activityService.Add(request);
+            return _activityService.Create(request);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> PutAsync(Guid id, [FromBody] ActivityDto request)
+        public ActionResult Put(Guid id, [FromBody] ActivityDto request)
         {
-            return await _activityService.Update(id, request);
+            return _activityService.Update(id, request);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteAsync(Guid id)
+        public ActionResult Delete(Guid id)
         { 
-            return await _activityService.Delete(id);
+            return _activityService.Delete(id);
         }
     }
 }

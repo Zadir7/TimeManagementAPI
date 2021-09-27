@@ -1,18 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using SharedData.DTO;
-using SharedData.ViewModels;
+using SharedData.Models;
 
 namespace Services.Abstracts
 {
     public interface IActivityService
     {
-        public Task<ActionResult> Add(ActivityDto userModel);
-        public Task<ActionResult> Update(Guid id, ActivityDto userModel);
-        public Task<ActionResult<ActivityDto>> Get(Guid id);
-        public Task<ActionResult> Delete(Guid id);
-        public Task<List<ActivityDto>> GetUserActivitiesOnSelectedMonth(UserVm user, int month);
+        public ServiceResult Add(ActivityDto userModel);
+        public ServiceResult Update(Guid id, ActivityDto userModel);
+        public ServiceResult<ActivityDto> Get(Guid id);
+        public ServiceResult Delete(Guid id);
+        public ServiceResult<List<ActivityDto>> GetList(UserActivityListRequest request);
     }
 }

@@ -8,6 +8,7 @@
       <ProjectReference Include="..\Repositories.Abstracts\Repositories.Abstracts.csproj" />
       <ProjectReference Include="..\Services.Abstracts\Services.Abstracts.csproj" />
       <ProjectReference Include="..\Utilities\Utilities.csproj" />
+      <ProjectReference Include="..\WebServices\WebServices.csproj" />
     </ItemGroup>
 
     <ItemGroup>

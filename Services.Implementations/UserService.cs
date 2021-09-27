@@ -1,15 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using Data.Entities;
-using Microsoft.AspNetCore.Mvc;
 using Repositories.Abstracts;
 using Services.Abstracts;
-using Services.Implementations.Validation;
 using SharedData.DTO;
 using SharedData.Locale;
+using SharedData.Models;
 using Utilities;
 
 namespace Services.Implementations
@@ -23,20 +19,11 @@ namespace Services.Implementations
             _repository = repository;
         }
 
-        public async Task<ActionResult> Add(UserDto userModel)
+        public ServiceResult Add(UserDto userModel)
         {
-            var validation = new UserModelValidation(userModel, _repository.GetByEmail(userModel.Email));
-            if (validation.RequiredFieldsAreNotFilled)
-            {
-                return ResponseFactory.FailResponse(ServiceErrors.RequiredFieldsAreNotFilled);
-            }
+            //TODO: Reimplement model validation
 
-            if (validation.UserAlreadyExists)
-            {
-                return ResponseFactory.FailResponse(ServiceErrors.UserWithThisEmailAlreadyExists);
-            }
-
-            _repository.Add(userModel.Map(model => new User
+            _repository.Add(userModel.Map(model => new Data.Entities.User
             {
                 Email = userModel.Email,
                 FirstName = userModel.FirstName,
@@ -50,30 +37,20 @@ namespace Services.Implementations
             catch(Exception e)
             {
                 //log exception
-                return ResponseFactory.FailResponse(ServiceErrors.DatabaseIsNotResponding);
+                return new FailedResult(ServiceErrors.DatabaseIsNotResponding);
             }
 
-            return new OkResult();
+            return new SuccessfulResult();
         }
 
-        public async Task<ActionResult> Update(Guid id, UserDto userModel)
+        public ServiceResult Update(Guid id, UserDto userModel)
         {
             if (_repository.GetById(id) is null)
             {
-                return new NotFoundResult();
+                return new FailedResult(ServiceErrors.UserDoesNotExist);
             }
 
-            var validation = new UserModelValidation(userModel, _repository.GetByEmail(userModel.Email));
-            
-            if (validation.RequiredFieldsAreNotFilled)
-            {
-                return ResponseFactory.FailResponse(ServiceErrors.RequiredFieldsAreNotFilled);
-            }
-
-            if (validation.UserAlreadyExists)
-            {
-                return ResponseFactory.FailResponse(ServiceErrors.UserWithThisEmailAlreadyExists);
-            }
+            //TODO: Reimplement model validation
 
             var existingUser = _repository.GetById(id);
             (existingUser.Email, existingUser.FirstName, existingUser.LastName, existingUser.MiddleName) =
@@ -87,24 +64,24 @@ namespace Services.Implementations
             catch (Exception e)
             {
                 //log exception
-                return ResponseFactory.FailResponse(ServiceErrors.DatabaseIsNotResponding);
+                return new FailedResult(ServiceErrors.DatabaseIsNotResponding);
             }
 
-            return new OkResult();
+            return new SuccessfulResult();
         }
 
-        public async Task<ActionResult<UserDto>> Get(Guid id)
+        public ServiceResult<UserDto> Get(Guid id)
         {
             var user = _repository.GetById(id);
-            if (user is null) return new StatusCodeResult((int)HttpStatusCode.NoContent);
+            if (user is null) return new FailedResult<UserDto>(ServiceErrors.UserDoesNotExist);
 
-            return user.Map(u => new UserDto(u.Email, u.FirstName, u.LastName, u.MiddleName));
+            return new SuccessfulResult<UserDto>(user.Map(u => new UserDto(u.Email, u.FirstName, u.LastName, u.MiddleName)));
         }
 
-        public async Task<ActionResult> Delete(Guid id)
+        public ServiceResult Delete(Guid id)
         {
             var user = _repository.GetById(id);
-            if (user is null) return new NotFoundResult();
+            if (user is null) return new FailedResult(ServiceErrors.UserDoesNotExist);
 
             try
             {
@@ -114,15 +91,16 @@ namespace Services.Implementations
             catch (Exception e)
             {
                 //log exception
-                return ResponseFactory.FailResponse(ServiceErrors.DatabaseIsNotResponding);
+                return new FailedResult(ServiceErrors.DatabaseIsNotResponding);
             }
 
-            return new OkResult();
+            return new SuccessfulResult();
         }
 
-        public async Task<List<UserDto>> GetUserList()
+        public ServiceResult<List<UserDto>> GetUserList()
         {
-            return _repository
+            return new SuccessfulResult<List<UserDto>>(
+                _repository
                 .GetUserList()
                 .ToList()
                 .Map(u => 
@@ -131,7 +109,8 @@ namespace Services.Implementations
                     u.FirstName,
                     u.LastName, 
                     u.MiddleName
-                ));
+                ))
+            );
         }
     }
 }

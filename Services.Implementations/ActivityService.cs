@@ -1,16 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
 using Data.Entities;
-using Microsoft.AspNetCore.Mvc;
 using Repositories.Abstracts;
 using Services.Abstracts;
-using Services.Implementations.Validation;
 using SharedData.DTO;
 using SharedData.Locale;
-using SharedData.ViewModels;
+using SharedData.Models;
 using Utilities;
 
 namespace Services.Implementations
@@ -27,18 +23,13 @@ namespace Services.Implementations
         }
 
 
-        public async Task<ActionResult> Add(ActivityDto activityModel)
+        public ServiceResult Add(ActivityDto activityModel)
         {
-            var validation = new ActivityModelValidation(activityModel);
-            if (validation.RequiredFieldsAreNotFilled)
-            {
-                return ResponseFactory.FailResponse(ServiceErrors.RequiredFieldsAreNotFilled);
-            }
-            
+            //TODO: Reimplement model validation
             var user = _userRepository.GetById(activityModel.User.Id);
             if (user is null)
             {
-                return ResponseFactory.FailResponse(ServiceErrors.UserDoesNotExist);
+                return new FailedResult(ServiceErrors.UserDoesNotExist);
             }
 
             _repository.Add(activityModel.Map(model => new Activity
@@ -56,29 +47,25 @@ namespace Services.Implementations
             catch(Exception e)
             {
                 //log exception
-                return ResponseFactory.FailResponse(ServiceErrors.DatabaseIsNotResponding);
+                return new FailedResult(ServiceErrors.DatabaseIsNotResponding);
             }
 
-            return new OkResult();
+            return new SuccessfulResult();
         }
 
-        public async Task<ActionResult> Update(Guid id, ActivityDto activityModel)
+        public ServiceResult Update(Guid id, ActivityDto activityModel)
         {
             if (_repository.GetById(id) is null)
             {
-                return new NotFoundResult();
+                return new FailedResult(ServiceErrors.ActivityDoesNotExist);
             }
 
-            var validation = new ActivityModelValidation(activityModel);
-            if (validation.RequiredFieldsAreNotFilled)
-            {
-                return ResponseFactory.FailResponse(ServiceErrors.RequiredFieldsAreNotFilled);
-            }
-
+            //TODO: Reimplement model validation
+            
             var user = _userRepository.GetById(activityModel.User.Id);
             if (user is null)
             {
-                return ResponseFactory.FailResponse(ServiceErrors.UserDoesNotExist);
+                return new FailedResult(ServiceErrors.UserDoesNotExist);
             }
 
             var existingActivity = _repository.GetById(id);
@@ -103,29 +90,31 @@ namespace Services.Implementations
             catch (Exception e)
             {
                 //log exception
-                return ResponseFactory.FailResponse(ServiceErrors.DatabaseIsNotResponding);
+                return new FailedResult(ServiceErrors.DatabaseIsNotResponding);
             }
 
-            return new OkResult();
+            return new SuccessfulResult();
         }
 
-        public async Task<ActionResult<ActivityDto>> Get(Guid id)
+        public ServiceResult<ActivityDto> Get(Guid id)
         {
             var activity = _repository.GetById(id);
-            if (activity is null) return new StatusCodeResult((int)HttpStatusCode.NoContent);
+            if (activity is null) return new FailedResult<ActivityDto>(ServiceErrors.ActivityDoesNotExist);
 
-            return activity.Map(a => new ActivityDto(
-                a.User.Map(u => new UserVm(u.Id, $"{u.FirstName} + {u.LastName}")),
+            var activityDto = activity.Map(a => new ActivityDto(
+                a.User.Map(u => new  SharedData.DTO.User(u.Id, $"{u.FirstName} + {u.LastName}")),
                 a.TimeSpent.Hours,
                 a.Date,
                 a.Note)
             );
+            
+            return new SuccessfulResult<ActivityDto>(activityDto);
         }
 
-        public async Task<ActionResult> Delete(Guid id)
+        public ServiceResult Delete(Guid id)
         {
             var activity = _repository.GetById(id);
-            if (activity is null) return new NotFoundResult();
+            if (activity is null) return new FailedResult(ServiceErrors.ActivityDoesNotExist);
 
             try
             {
@@ -135,21 +124,22 @@ namespace Services.Implementations
             catch (Exception e)
             {
                 //log exception
-                return ResponseFactory.FailResponse(ServiceErrors.DatabaseIsNotResponding);
+                return new FailedResult(ServiceErrors.DatabaseIsNotResponding);
             }
 
-            return new OkResult();
+            return new SuccessfulResult();
         }
 
-        public async Task<List<ActivityDto>> GetUserActivitiesOnSelectedMonth(UserVm user, int month)
+        public ServiceResult<List<ActivityDto>> GetList(UserActivityListRequest request)
         {
+            var (userVm, month) = request;
             var result = _repository
-                .GetActivitiesOfUserOnChosenMonth(user.Id, month)
+                .GetActivitiesOfUserOnChosenMonth(userVm.Id, month)
                 ?.ToList()
-                ?.Map(a => new ActivityDto(user, a.TimeSpent.Hours, a.Date, a.Note))
+                ?.Map(a => new ActivityDto(userVm, a.TimeSpent.Hours, a.Date, a.Note))
                 ?.ToList();
 
-            return result ?? new List<ActivityDto>();
+            return new SuccessfulResult<List<ActivityDto>>(result ?? new List<ActivityDto>());
         }
     }
 }
