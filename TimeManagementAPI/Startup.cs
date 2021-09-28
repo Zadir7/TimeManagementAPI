@@ -10,6 +10,8 @@ using Repositories.Abstracts;
 using Repositories.Implementations;
 using Services.Abstracts;
 using Services.Implementations;
+using WebServices;
+using WebServices.Abstracts;
 
 namespace TimeManagementAPI
 {
@@ -35,6 +37,9 @@ namespace TimeManagementAPI
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IActivityService, ActivityService>();
+            
+            services.AddScoped<IUserWebService, UserWebService>();
+            services.AddScoped<IActivityWebService, ActivityWebService>();
 
             services.AddCors(options => 
                 options.AddPolicy(CorsAllowAllPolicy, builder => 

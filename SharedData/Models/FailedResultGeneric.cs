@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace SharedData.Models
 {
-    public sealed record FailedResult<T> : ServiceResult<T>, IActionResultConvertible<T>
+    public sealed record FailedResult<T> : ServiceResult<T>
     {
         private string Message { get; }
 
@@ -12,7 +12,7 @@ namespace SharedData.Models
             Message = message;
         }
 
-        public ActionResult<T> AsActionResult() => 
+        public override ActionResult<T> AsActionResult() => 
             new ObjectResult(
                 new ProblemDetails()
                 {

@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace SharedData.Models
 {
-    public sealed record SuccessfulResult<T> : ServiceResult<T>, IActionResultConvertible<T>
+    public sealed record SuccessfulResult<T> : ServiceResult<T>
     {
         public T Data { get; }
 
@@ -11,7 +11,7 @@ namespace SharedData.Models
             Data = data;
         }
 
-        public ActionResult<T> AsActionResult() =>
+        public override ActionResult<T> AsActionResult() =>
             new ObjectResult(Data);
     }
 }

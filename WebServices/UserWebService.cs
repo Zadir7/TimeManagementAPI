@@ -16,29 +16,14 @@ namespace WebServices
             _userService = userService;
         }
         
-        public ActionResult<UserDto> Get(Guid id)
-        {
-            return _userService.Get(id);
-        }
+        public ActionResult<UserDto> Get(Guid id) => _userService.Get(id).AsActionResult();
 
-        public ActionResult<List<UserDto>> GetUserList()
-        {
-            throw new NotImplementedException();
-        }
+        public ActionResult<List<UserDto>> GetUserList() => _userService.GetUserList().AsActionResult();
 
-        public ActionResult Create(UserDto request)
-        {
-            throw new NotImplementedException();
-        }
+        public ActionResult Create(UserDto request) => _userService.Add(request).AsActionResult();
 
-        public ActionResult Update(Guid id, UserDto request)
-        {
-            throw new NotImplementedException();
-        }
+        public ActionResult Update(Guid id, UserDto request) => _userService.Update(id, request).AsActionResult();
 
-        public ActionResult Delete(Guid id)
-        {
-            throw new NotImplementedException();
-        }
+        public ActionResult Delete(Guid id) => _userService.Delete(id).AsActionResult();
     }
 }

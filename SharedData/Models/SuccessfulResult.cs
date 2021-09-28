@@ -2,9 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace SharedData.Models
 {
-    public record SuccessfulResult : ServiceResult, IActionResultConvertible
+    public record SuccessfulResult : ServiceResult
     {
-        public ActionResult AsActionResult() =>
+        public override ActionResult AsActionResult() =>
             new OkResult();
     }
 }
